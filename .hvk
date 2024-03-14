@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# To set ARCH and CROSS_COMPILE variables:
+source /opt/eco-doog/0.0.1/environment-setup-cortexa55-poky-linux
+
+DEFCONFIG_BOARD=gecko_nxtpad
+DTS_BOARD=renesas/rzg2lc-hummingboard
+
+BOOT_SRC=arch/${ARCH}/boot
+BOOT_DEST=/boot
+
+DTB_SRC=${BOOT_SRC}/dts/${DTS_BOARD}.dtb
+DTB_DEST=${BOOT_DEST}/latest.dtb
+
+# List of DT schema files to validate, separated by ":"
+# Note: do not insert any whitespace
+DT_SCHEMA_FILES=""
+
+# Additional list of DTB files to validate (DTS_BOARD is checked by default):
+DTB_FILES=""
