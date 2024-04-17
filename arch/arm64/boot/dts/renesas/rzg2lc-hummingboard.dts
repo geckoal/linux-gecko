@@ -13,7 +13,7 @@
 #include "rz-hummingboard-common.dtsi"
 
 / {
-  model = "Solidrun RZ/G2LC HummingBoard-Ripple";
+  model = "Gecko ECO nxtpad";
   compatible = "renesas,rzg2lc-sr-som", "renesas,r9a07g044c2", "renesas,r9a07g044";
 };
 
