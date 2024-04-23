@@ -71,3 +71,7 @@
 &usb1_vbus {
 	gpio = <&pinctrl RZG2L_GPIO(5, 0) GPIO_ACTIVE_HIGH>;
 };
+
+&usb2_phy0 {
+	renesas,no-otg-pins;
+};
