@@ -59,13 +59,13 @@
 	};
 
 	reg_1p1v: regulator-vdd-core {
-  		compatible = "regulator-fixed";
-  		regulator-name = "fixed-1.1V";
-  		regulator-min-microvolt = <1100000>;
-  		regulator-max-microvolt = <1100000>;
-  		regulator-boot-on;
-  		regulator-always-on;
-  	};
+		compatible = "regulator-fixed";
+		regulator-name = "fixed-1.1V";
+		regulator-min-microvolt = <1100000>;
+		regulator-max-microvolt = <1100000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
 
 	reg_sdhi0_vccq: regulator-vccq-sdhi0 {
 		compatible = "regulator-gpio";
