@@ -1,0 +1,180 @@
+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+/*
+ * Device Tree Source for the RZ/G2LC Solidrun SOM
+ *
+ * Copyright (C) 2021 Renesas Electronics Corp.
+ */
+
+/dts-v1/;
+/* RZ/G2LC R9A07G044C2 SoC */
+#include "r9a07g044c2.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+
+#include "rz_2l-sr-som-common.dtsi"
+
+/ {
+	aliases {
+		serial0 = &scif0;
+		serial1 = &scif1;
+		i2c0 = &i2c0;
+		i2c1 = &i2c1;
+		i2c2 = &i2c2;
+		mmc0 = &sdhi0;
+		mmc1 = &sdhi1;
+		ethernet0 = &eth0;
+	};
+
+	memory@48000000 {
+		device_type = "memory";
+		/* first 128MB is reserved for secure area. */
+		reg = <0x0 0x48000000 0x0 0x38000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+                multimedia_cma: linux,multimedia {
+                        compatible = "shared-dma-pool";
+                        reusable;
+                        size = <0x0 0x10000000>;
+                };
+
+		mmp_reserved: linux,mmp {
+			compatible = "shared-dma-pool";
+			reusable;
+			reg = <0x00000000 0x68000000 0x0 0x8000000>;
+		};
+	};
+};
+
+&eth0 {
+	phy0: ethernet-phy@0 {
+		reg = <0>;
+		max-speed = <100>;  /* configure ethernet max speed for ethernet0 */
+		/*
+		* disable interrupt mode
+		* interrupt-parent = <&pinctrl>;
+		* interrupts = <RZG2L_GPIO(27, 0) IRQ_TYPE_LEVEL_LOW>;
+		*/
+	};
+};
+
+&i2c0 {
+	pinctrl-0 = <&i2c0_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+
+	/* EEPROM CAT24AA01TDI-GT3 1-kb (128 B x 8)  */
+	eeprom: eeprom@50 {
+		compatible = "atmel,24c02";
+		reg = <0x50>;
+		pagesize = <16>;
+	};
+};
+
+&i2c1 {
+	/delete-node/ eeprom@50;
+};
+
+&i2c2 {
+	pinctrl-0 = <&i2c2_pins>;
+	pinctrl-names = "default";
+	clock-frequency = <400000>;
+
+	status = "okay";
+
+	pmic: raa215300@12 {
+		compatible = "renesas,raa215300";
+		reg = <0x12>;
+		rtc-enable;
+		mpio2-32k-enable;
+	};
+
+	rtc: isl1208@6f {
+		compatible = "isil,isl1208";
+		reg = <0x6f>;
+	};
+
+};
+
+&i2c3 {
+	/delete-property/ pinctrl-0;
+	/delete-property/ pinctrl-names;
+	status = "disabled";
+	/delete-node/ raa215300@12;
+};
+
+&pinctrl {
+	/delete-node/ eth1;
+	/delete-node/ i2c3;
+
+        gpio-sd0-dev-sel-hog {
+                gpio-hog;
+                gpios = <RZG2L_GPIO(22, 1) GPIO_ACTIVE_LOW>;
+                output-high;
+                line-name = "gpio_sd0_dev_sel";
+        };
+
+        i2c2_pins: i2c2 {
+                pinmux = <RZG2L_PORT_PINMUX(42, 3, 1)>, /* SDA */
+                         <RZG2L_PORT_PINMUX(42, 4, 1)>; /* SCL */
+        };
+
+	scif2_pins: scif2 {
+		pinmux = <RZG2L_PORT_PINMUX(42, 0, 4)>, /* TxD */
+			 <RZG2L_PORT_PINMUX(42, 1, 4)>, /* RxD */
+			 <RZG2L_PORT_PINMUX(5, 1, 2)>, /* CTS# */
+			 <RZG2L_PORT_PINMUX(5, 2, 2)>; /* RTS# */
+	};
+};
+
+&reg_sdhi0_vccq {
+	states = <3300000 0>, <1800000 1>;
+	gpios = <&pinctrl RZG2L_GPIO(39, 0) GPIO_ACTIVE_LOW>;
+};
+
+&sbc {
+	pinctrl-0 = <&qspi0_pins>;
+	pinctrl-names = "default";
+	status = "disabled";
+};
+
+&scif2 {
+	bluetooth {
+		compatible = "brcm,bcm4330-bt";
+		shutdown-gpios = <&pinctrl RZG2L_GPIO(23, 1) GPIO_ACTIVE_HIGH>;
+	};
+};
+
+#if SW_SD0_DEV_SEL
+/* eMMC */
+&sdhi0 {
+	pinctrl-0 = <&sdhi0_emmc_pins>;
+	pinctrl-1 = <&sdhi0_emmc_pins>;
+	pinctrl-names = "default", "state_uhs";
+
+	vmmc-supply = <&reg_3p3v>;
+	vqmmc-supply = <&reg_sdhi0_vccq>;
+	bus-width = <8>;
+	mmc-hs200-1_8v;
+	non-removable;
+	fixed-emmc-driver-type = <1>;
+	status = "okay";
+};
+#endif
+
+
+/* WiFi - CYW43439 */
+&sdhi1 {
+	brcmf: wifi@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
+};
+
+&sdio_pwrseq {
+	reset-gpios = <&pinctrl RZG2L_GPIO(23, 0) GPIO_ACTIVE_LOW>;
+};
