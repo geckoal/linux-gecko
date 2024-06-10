@@ -747,12 +747,9 @@
 				};
 
 				port@1 {
-					#address-cells = <1>;
-					#size-cells = <0>;
 					reg = <1>;
 
-					csi2cru: endpoint@0 {
-						reg = <0>;
+					csi2cru: endpoint {
 						remote-endpoint = <&crucsi2>;
 					};
 				};
