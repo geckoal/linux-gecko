@@ -894,6 +894,7 @@
 			gpio-controller;
 			#gpio-cells = <2>;
 			#interrupt-cells = <2>;
+			#address-cells = <0>;
 			interrupt-parent = <&irqc>;
 			interrupt-controller;
 			gpio-ranges = <&pinctrl 0 0 392>;
