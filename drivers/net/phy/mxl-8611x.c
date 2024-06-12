@@ -438,10 +438,10 @@ static int mxl86110_read_page(struct phy_device *phydev)
 static int mxl86110_write_page(struct phy_device *phydev, int page)
 {
 	return __phy_write(phydev, MXL8611X_EXTD_REG_ADDR_OFFSET, page);
-};                       
+};
 
 /**
- * mxl8611x_convert_ps_to_reg() - converts delay ps to register values 
+ * mxl8611x_convert_ps_to_reg() - converts delay ps to register values
  * @of_value: value of delay in ps from device-tree
  * @reg: The reg value to store
  */
@@ -478,7 +478,7 @@ static int mxl8611x_rgmii_cfg_of_delay(struct phy_device *phydev, const char *pr
 	ret = mxl8611x_convert_ps_to_reg(of_val, val);
 	if (ret)
 		phydev_err(phydev, "%s, %s = %d is invalid, using default value\n",
-			__func__, property, of_val); 
+			__func__, property, of_val);
 
 	return ret;
 }
