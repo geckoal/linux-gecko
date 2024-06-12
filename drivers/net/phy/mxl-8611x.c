@@ -1217,7 +1217,7 @@ static int mxlphy_setup_master_slave(struct phy_device *phydev)
  * efficent ethernet modes. Returns 0 if the PHY's advertisement hasn't
  * changed, and 1 if it has changed.
  */
-int mxlphy_config_eee_advert(struct phy_device *phydev)
+static int mxlphy_config_eee_advert(struct phy_device *phydev)
 {
 	int err;
 
