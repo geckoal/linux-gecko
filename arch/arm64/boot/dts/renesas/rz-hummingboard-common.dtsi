@@ -113,7 +113,7 @@
 			reg = <1>;
 
 			csi2_to_cru: endpoint {
-				remote-endpoint = <&cru_to_csi2>;
+				remote-endpoint = <&crucsi2>;
 			};
 		};
 
