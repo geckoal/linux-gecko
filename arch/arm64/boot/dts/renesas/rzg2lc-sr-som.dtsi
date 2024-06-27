@@ -141,6 +141,7 @@
 	/delete-property/ dma-names;
 
 	bluetooth {
+		max-speed = <460800>;
 		compatible = "brcm,bcm4330-bt";
 		shutdown-gpios = <&pinctrl RZG2L_GPIO(23, 1) GPIO_ACTIVE_HIGH>;
 	};
