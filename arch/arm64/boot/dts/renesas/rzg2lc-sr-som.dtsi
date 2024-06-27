@@ -36,11 +36,11 @@
 		#size-cells = <2>;
 		ranges;
 
-                multimedia_cma: linux,multimedia {
-                        compatible = "shared-dma-pool";
-                        reusable;
-                        size = <0x0 0x10000000>;
-                };
+		multimedia_cma: linux,multimedia {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x0 0x10000000>;
+		};
 
 		mmp_reserved: linux,mmp@68000000 {
 			compatible = "shared-dma-pool";
@@ -111,17 +111,17 @@
 	/delete-node/ eth1;
 	/delete-node/ i2c3;
 
-        gpio-sd0-dev-sel-hog {
-                gpio-hog;
-                gpios = <RZG2L_GPIO(22, 1) GPIO_ACTIVE_LOW>;
-                output-high;
-                line-name = "gpio_sd0_dev_sel";
-        };
+	gpio-sd0-dev-sel-hog {
+		gpio-hog;
+		gpios = <RZG2L_GPIO(22, 1) GPIO_ACTIVE_LOW>;
+		output-high;
+		line-name = "gpio_sd0_dev_sel";
+	};
 
-        i2c2_pins: i2c2 {
-                pinmux = <RZG2L_PORT_PINMUX(42, 3, 1)>, /* SDA */
-                         <RZG2L_PORT_PINMUX(42, 4, 1)>; /* SCL */
-        };
+	i2c2_pins: i2c2 {
+		pinmux = <RZG2L_PORT_PINMUX(42, 3, 1)>, /* SDA */
+			 <RZG2L_PORT_PINMUX(42, 4, 1)>; /* SCL */
+	};
 
 	scif2_pins: scif2 {
 		pinmux = <RZG2L_PORT_PINMUX(42, 0, 4)>, /* TxD */
