@@ -38,6 +38,14 @@
 		output-high;
 		line-name = "gpio_lte_on";
 	};
+
+	gpio-usb0-vbus-otg-hog {
+		gpio-hog;
+		gpios = <RZG2L_GPIO(4, 0) GPIO_ACTIVE_HIGH>;
+		output-low;
+		gpio-open-drain;
+		line-name = "usb0_vbus_otg";
+	};
 };
 
 &reg_sdhi0_vmmc {
@@ -54,6 +62,10 @@
 
 &sdhi0 {
 	cd-gpios = <&pinctrl RZG2L_GPIO(18, 0) GPIO_ACTIVE_LOW>;
+};
+
+&usb0_vbus_otg {
+	status = "disabled";
 };
 
 &usb1_vbus {
