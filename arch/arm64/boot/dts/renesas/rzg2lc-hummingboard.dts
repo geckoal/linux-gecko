@@ -32,8 +32,6 @@
 };
 
 &pinctrl {
-	/delete-node/ gpio-lte_reset;
-
 	gpio-lte_on {
 		gpio-hog;
 		gpios = <RZG2L_GPIO(19, 1) GPIO_ACTIVE_HIGH>;
