@@ -842,6 +842,8 @@ static ssize_t rzg2l_mipi_dsi_host_transfer(struct mipi_dsi_host *host,
 	unsigned int timeout;
 	unsigned int i;
 
+	dev_dbg(mipi_dsi->dev, "%s() entry\n", __func__);
+
 	err = mipi_dsi_create_packet(&packet, msg);
 	if (err < 0)
 		return err;
@@ -927,6 +929,7 @@ static ssize_t rzg2l_mipi_dsi_host_transfer(struct mipi_dsi_host *host,
 	}
 
 	if (!timeout) {
+		dev_warn(mipi_dsi->dev, "%s() PT timeout\n", __func__);
 		err = -ETIMEDOUT;
 		goto stop_sequence;
 
