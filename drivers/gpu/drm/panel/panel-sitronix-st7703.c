@@ -143,7 +143,8 @@ struct st7703_panel_desc jh057n00900_panel_desc = {
 	.mode = &jh057n00900_mode,
 	.lanes = 4,
 	.mode_flags = MIPI_DSI_MODE_VIDEO |
-		MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
+		MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
+		MIPI_DSI_MODE_LPM,
 	.format = MIPI_DSI_FMT_RGB888,
 	.init_sequence = jh057n_init_sequence,
 };
