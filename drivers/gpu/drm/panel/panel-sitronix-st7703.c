@@ -235,10 +235,14 @@ static int st7703_prepare(struct drm_panel *panel)
 		goto disable_vcc;
 	}
 
-	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-	usleep_range(20, 40);
 	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-	msleep(20);
+	msleep(5);
+
+	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+	msleep(10);
+
+	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+	msleep(130);
 
 	ctx->prepared = true;
 
