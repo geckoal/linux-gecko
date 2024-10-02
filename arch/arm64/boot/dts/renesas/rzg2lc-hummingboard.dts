@@ -17,10 +17,6 @@
   compatible = "renesas,rzg2lc-sr-som", "renesas,r9a07g044c2", "renesas,r9a07g044";
 };
 
-&adv7535 {
-	pd-gpios = <&pinctrl RZG2L_GPIO(40, 2) GPIO_ACTIVE_LOW>; // ADV_PD / DSI_EN J9-34 / P40_2
-};
-
 &pinctrl {
 	/delete-node/ gpio-lte_reset;
 

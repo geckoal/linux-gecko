@@ -9,17 +9,6 @@
 #include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
 
 / {
-	hdmi-out {
-		compatible = "hdmi-connector";
-		type = "d";
-
-		port {
-			hdmi_con_out: endpoint {
-			remote-endpoint = <&adv7535_out>;
-			};
-		};
-	};
-
 	cam_ext_2v8: 2p8v {
 		compatible = "regulator-fixed";
 		regulator-name = "camera_ext_2v8";
@@ -74,12 +63,6 @@
 		regulator-always-on;
 		enable-active-high;
 	};
-
-	ar0521_clk: osc27000_clk {
-		compatible = "fixed-clock";
-		#clock-cells = <0>;
-		clock-frequency = <26000000>;
-	};
 };
 
 &canfd {
@@ -94,41 +77,40 @@
 };
 
 &cru {
-	status = "okay";
+	status = "disabled";
 };
 
 &csi2 {
-	status = "okay";
-	ports {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		port@1 {
-			reg = <1>;
-
-			csi2_to_cru: endpoint {
-				remote-endpoint = <&cru_to_csi2>;
-			};
-		};
-
-		port@0 {
-			reg = <0>;
-
-			csi2_in: endpoint {
-				remote-endpoint = <&ar0521_0>;
-				data-lanes = <1 2 3 4>;
-			};
-		};
-	};
+	status = "disabled";
 };
 
 &dsi0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
 	status = "okay";
-};
 
-&dsi0_out {
-	remote-endpoint = <&adv7535_in>;
-	data-lanes = <1 2 3 4>;
+	ports {
+		port@1 {
+			dsi0_out: endpoint {
+				data-lanes = <1 2 3 4>;
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+
+	panel-lvds@0 {
+		compatible = "rocktech,jh057n00900";
+		reg = <0>;
+		reset-gpios = <&pinctrl RZG2L_GPIO(44, 1) GPIO_ACTIVE_LOW>;
+		iovcc-supply = <&reg_3p3v>;
+		vcc-supply = <&reg_3p3v>;
+
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&dsi0_out>;
+			};
+		};
+	};
 };
 
 &du {
@@ -158,79 +140,6 @@
 	pinctrl-names = "default";
 	clock-frequency = <400000>;
 	status = "okay";
-
-	adv7535: adv7535@3d {
-		compatible = "adi,adv7535";
-		reg = <0x3d>;
-		adi,dsi-lanes = <4>;
-		pd-gpios = <&pinctrl RZG2L_GPIO(3, 0) GPIO_ACTIVE_LOW>; // ADV_PD / DSI_EN J9-34 / P4_0
-		/*
-		 * With interrupts enabled and hdmi connected during boot,
-		 * rzg2l_mipi_dsi_enable never happens and display receives no signal.
-		 * Re-enable once issue has been resolved.
-		 *
-		 * interrupt-parent = <&pinctrl>;
-		 * interrupts = <RZG2L_GPIO(9, 1) IRQ_TYPE_EDGE_FALLING>; // DSI_TS_nINT J5001-43 P9_1
-		 */
-		status = "okay";
-
-		ports {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			port@0 {
-				reg = <0>;
-				adv7535_in: endpoint@0 {
-					remote-endpoint = <&dsi0_out>;
-				};
-			};
-
-			port@1 {
-				reg = <1>;
-				adv7535_out: endpoint@1 {
-					remote-endpoint = <&hdmi_con_out>;
-				};
-			};
-
-			port@2 {
-				reg = <2>;
-				codec_endpoint: endpoint {
-					/* Audio signals not connected. */
-				};
-			};
-		};
-	};
-
-	rtc@69 {
-		compatible = "abracon,abx80x";
-		reg = <0x69>;
-		abracon,tc-diode = "schottky";
-		abracon,tc-resistor = <3>;
-	};
-
-	eeprom_carrier: eeprom@57 {
-		compatible = "st,24c02", "atmel,24c02";
-		reg = <0x57>;
-		pagesize = <16>;
-	};
-
-	ar0521: sensor@36 {
-		compatible = "onnn,ar0521";
-		reg = <0x36>;
-		clocks = <&ar0521_clk>;
-		clock-names = "extclk";
-		vaa-supply = <&cam_ext_2v8>;
-		vdd-supply = <&cam_ext_1v2>;
-		vdd_io-supply = <&cam_ext_1v8>;
-
-		port {
-			ar0521_0: endpoint {
-				remote-endpoint = <&csi2_in>;
-				clock-lanes = <0>;
-				data-lanes = <1 2 3 4>;
-			};
-		};
-	};
 };
 
 &ohci0 {
