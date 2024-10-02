@@ -204,12 +204,12 @@
 
 /* eMMC */
 &sdhi0 {
-	pinctrl-0 = <&sdhi0_pins>;
+	/delete-property/ vqmmc-supply;
+	pinctrl-0 = <>;
 	pinctrl-1 = <&sdhi0_pins_uhs>;
 	pinctrl-names = "default", "state_uhs";
 
 	vmmc-supply = <&reg_3p3v>;
-	vqmmc-supply = <&reg_sdhi0_vccq>;
 	bus-width = <8>;
 	mmc-hs200-1_8v;
 	non-removable;
