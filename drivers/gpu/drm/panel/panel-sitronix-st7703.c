@@ -80,6 +80,8 @@ static int jh057n_init_sequence(struct st7703 *ctx)
 {
 	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
 
+	dev_warn(ctx->dev, "%s() entry\n", __func__);
+
 	jd9365da_switch_page(dsi, 0x00);
 	jadard_enable_standard_cmds(dsi);
 
@@ -291,6 +293,8 @@ static int jh057n_init_sequence(struct st7703 *ctx)
 	msleep(20);
 
 	mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+
+	dev_warn(ctx->dev, "%s() exit\n", __func__);
 
 	return 0;
 }
@@ -529,6 +533,9 @@ static int st7703_probe(struct mipi_dsi_device *dsi)
 	dsi->mode_flags = ctx->desc->mode_flags;
 	dsi->format = ctx->desc->format;
 	dsi->lanes = ctx->desc->lanes;
+
+	dev_warn(dev, "%s(): pixel clock: %d MHz\n", __func__, ctx->desc->mode->clock);
+	dev_warn(dev, "%s(): mode_flags:  $%04X\n", __func__, (u16) dsi->mode_flags);
 
 	ctx->vcc = devm_regulator_get(dev, "vcc");
 	if (IS_ERR(ctx->vcc)) {
