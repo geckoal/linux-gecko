@@ -118,19 +118,25 @@ static int jh057n_init_sequence(struct st7703 *ctx)
 	return 0;
 }
 
+#define X_RES 600
+#define Y_RES 1600
+
 static const struct drm_display_mode jh057n00900_mode = {
-	.hdisplay    = 720,
-	.hsync_start = 720 + 90,
-	.hsync_end   = 720 + 90 + 20,
-	.htotal	     = 720 + 90 + 20 + 20,
-	.vdisplay    = 1440,
-	.vsync_start = 1440 + 20,
-	.vsync_end   = 1440 + 20 + 4,
-	.vtotal	     = 1440 + 20 + 4 + 12,
-	.clock	     = 75276,
-	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
-	.width_mm    = 65,
-	.height_mm   = 130,
+	.clock		= (X_RES + 20 + 20 + 20) * (Y_RES + 20 + 4 + 20) * 60 / 1000,
+
+	.hdisplay	= X_RES,
+	.hsync_start	= X_RES + 20,
+	.hsync_end	= X_RES + 20 + 20,
+	.htotal		= X_RES + 20 + 20 + 20,
+
+	.vdisplay	= Y_RES,
+	.vsync_start	= Y_RES + 20,
+	.vsync_end	= Y_RES + 20 + 4,
+	.vtotal		= Y_RES + 20 + 4 + 20,
+
+	.width_mm	= 83,
+	.height_mm	= 221,
+	.flags          = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
 };
 
 struct st7703_panel_desc jh057n00900_panel_desc = {
