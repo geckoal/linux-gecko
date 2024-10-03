@@ -66,6 +66,53 @@ static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
 #define jd9365da_switch_page(dsi, page) \
 	dsi_generic_write_seq(dsi, JD9365DA_DCS_SWITCH_PAGE, (page))
 
+#define DCS_GET_ID1            0xda
+#define DCS_GET_ID2            0xdb
+#define DCS_GET_ID3            0xdc
+
+#define JD9365_RDDIDIF  0x04 /* Return ID1, ID2 and ID3. */
+
+static int dsi_get_id(struct drm_panel *panel)
+{
+	struct device *dev = panel->dev;
+	struct st7703 *ctx = panel_to_st7703(panel);
+	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
+	u8 id[3];
+	int ret;
+
+	memset(id, 0x00, sizeof(id));
+
+	ret = mipi_dsi_dcs_read(dsi, JD9365_RDDIDIF, id, 3);
+	if (ret)
+		dev_err(dev, "%s(): error reading RDDIDIF register\n", __func__);
+
+	ret = mipi_dsi_dcs_read(dsi, DCS_GET_ID1, &id[0], 1);
+	if (ret) {
+		dev_err(dev, "%s(): error reading ID1 register\n", __func__);
+		return ret;
+	}
+
+	dev_warn(dev, "%s(): ID1 = $%02X\n", __func__, id[0]);
+
+	ret = mipi_dsi_dcs_read(dsi, DCS_GET_ID2, &id[1], 1);
+	if (ret) {
+		dev_err(dev, "%s(): error reading ID2 register\n", __func__);
+		return ret;
+	}
+
+	dev_warn(dev, "%s(): ID2 = $%02X\n", __func__, id[1]);
+
+	ret = mipi_dsi_dcs_read(dsi, DCS_GET_ID3, &id[2], 1);
+	if (ret) {
+		dev_err(dev, "%s(): error reading ID3 register\n", __func__);
+		return ret;
+	}
+
+	dev_warn(dev, "%s(): ID3 = $%02X\n", __func__, id[2]);
+
+	return ret;
+}
+
 static int jadard_enable_standard_cmds(struct mipi_dsi_device *dsi)
 {
 	dsi_generic_write_seq(dsi, 0xe1, 0x93);
@@ -293,6 +340,8 @@ static int jh057n_init_sequence(struct st7703 *ctx)
 	msleep(20);
 
 	mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+
+	(void) dsi_get_id(&ctx->panel);
 
 	dev_warn(ctx->dev, "%s() exit\n", __func__);
 
