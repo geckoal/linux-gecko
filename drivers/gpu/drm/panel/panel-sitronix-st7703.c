@@ -80,6 +80,9 @@ static int dsi_get_id(struct drm_panel *panel)
 	u8 id[3];
 	int ret;
 
+	dev_warn(dev, "%s(): bypassing read of ID registers (results in timeout)\n", __func__);
+	return 0;
+
 	memset(id, 0x00, sizeof(id));
 
 	ret = mipi_dsi_dcs_read(dsi, JD9365_RDDIDIF, id, 3);
