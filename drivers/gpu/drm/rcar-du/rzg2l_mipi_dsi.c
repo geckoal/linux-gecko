@@ -621,6 +621,14 @@ static void rzg2l_mipi_dsi_enable(struct drm_bridge *bridge)
 
 	rzg2l_mipi_dsi_set_display_timing(mipi_dsi);
 
+	ret = rzg2l_mipi_dsi_start_hs_clock(mipi_dsi);
+	if (ret < 0)
+		return;
+
+	ret = rzg2l_mipi_dsi_start_video(mipi_dsi);
+	if (ret < 0)
+		return;
+
 	if (mipi_dsi->panel) {
 		/*
 		 * Workaround
@@ -646,17 +654,8 @@ static void rzg2l_mipi_dsi_enable(struct drm_bridge *bridge)
 			if (ret < 0)
 				return;
 
-			goto start_video;
 		}
 	}
-
-	ret = rzg2l_mipi_dsi_start_hs_clock(mipi_dsi);
-	if (ret < 0)
-		return;
-start_video:
-	ret = rzg2l_mipi_dsi_start_video(mipi_dsi);
-	if (ret < 0)
-		return;
 }
 
 static void rzg2l_mipi_dsi_disable(struct drm_bridge *bridge)
