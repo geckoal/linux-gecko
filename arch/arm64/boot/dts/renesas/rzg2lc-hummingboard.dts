@@ -19,12 +19,17 @@
 
 &pinctrl {
 	/delete-node/ gpio-lte_reset;
+	/delete-node/ spi1;
 
 	gpio-lte_on {
 		gpio-hog;
 		gpios = <RZG2L_GPIO(19, 1) GPIO_ACTIVE_HIGH>;
 		output-high;
 		line-name = "gpio_lte_on";
+	};
+
+	panel_pins: panel0 {
+		pinmux = <RZG2L_PORT_PINMUX(44, 1, 0)>;
 	};
 };
 
@@ -54,3 +59,6 @@
 	gpio-open-drain;
 };
 
+&spi1 {
+	status = "disabled";
+};

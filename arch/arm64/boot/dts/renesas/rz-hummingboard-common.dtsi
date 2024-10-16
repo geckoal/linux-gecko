@@ -100,6 +100,8 @@
 
 	panel-lvds@0 {
 		compatible = "rocktech,jh057n00900";
+		pinctrl-0 = <&panel_pins>;
+		pinctrl-names = "default";
 		reg = <0>;
 		reset-gpios = <&pinctrl RZG2L_GPIO(44, 1) GPIO_ACTIVE_LOW>;
 		iovcc-supply = <&reg_3p3v>;
@@ -197,14 +199,6 @@
 	status = "disabled";
 #endif
 	cd-gpios = <&pinctrl RZG2L_GPIO(47, 0) GPIO_ACTIVE_LOW>;
-};
-
-&spi1 {
-	pinctrl-0 = <&spi1_pins>;
-	pinctrl-names = "default";
-	dmas = <&dmac 0x2e99>, <&dmac 0x2e9a>;
-	dma-names = "tx", "rx";
-	status = "okay";
 };
 
 &usb2_phy0 {
