@@ -259,6 +259,7 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
 		unsigned long long divide_val;
 		u32 dsi_div;
 		u8 pdiv1, pdiv2;
+		int tweak_val = 1;
 
 		/* Common settings */
 		param.frequency = 0;
@@ -352,7 +353,14 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
 						/* Divide raw bit clock by source clock. */
 						/* Numerator portion (integer) */
 						divide_val = foutvco * param.pl5_refdiv;
-						param.pl5_intin = divide_val / OSCLK_HZ;
+
+						if (pix_clk > 140000000) {
+							tweak_val = 3;
+							dev_warn(rcdu->dev, "%s(): tweak_val = %d\n", __func__, tweak_val);
+						}
+
+						param.pl5_intin = divide_val / OSCLK_HZ + tweak_val;
+
 						if ((param.pl5_intin < 20) || (param.pl5_intin > 320))
 							continue;
 
