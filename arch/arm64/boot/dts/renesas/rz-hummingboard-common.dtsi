@@ -99,13 +99,11 @@
 	};
 
 	panel-lvds@0 {
-		compatible = "rocktech,jh057n00900";
-		pinctrl-0 = <&panel_pins>;
-		pinctrl-names = "default";
+		compatible = "ilitek,ph720128t005";
 		reg = <0>;
 		reset-gpios = <&pinctrl RZG2L_GPIO(44, 1) GPIO_ACTIVE_LOW>;
-		iovcc-supply = <&reg_3p3v>;
-		vcc-supply = <&reg_3p3v>;
+		power-supply = <&reg_3p3v>;
+		status = "okay";
 
 		port {
 			panel_in: endpoint {
