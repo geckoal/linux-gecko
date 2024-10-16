@@ -239,6 +239,8 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
 	u32 dsmr;
 	u32 escr;
 
+	dev_warn(rcdu->dev, "%s(): entry\n", __func__);
+
 	if (rcar_du_has(rcdu, RCAR_DU_FEATURE_RZG2L)) {
 		struct drm_crtc *crtc = &rcrtc->crtc;
 		struct drm_device *ddev = rcrtc->crtc.dev;
@@ -413,6 +415,19 @@ found_clk:
 				return;
 			}
 		}
+
+		dev_warn(rcrtc->dev->dev, "cpg parameters:\n");
+		dev_warn(rcrtc->dev->dev, "  frequency    = %d\n", param.frequency);
+		dev_warn(rcrtc->dev->dev, "  pl5_refdiv   = %d\n", param.pl5_refdiv);
+		dev_warn(rcrtc->dev->dev, "  pl5_intin    = %d\n", param.pl5_intin);
+		dev_warn(rcrtc->dev->dev, "  pl5_fracin   = %d\n", param.pl5_fracin);
+		dev_warn(rcrtc->dev->dev, "  pl5_postdiv1 = %d\n", param.pl5_postdiv1);
+		dev_warn(rcrtc->dev->dev, "  pl5_postdiv2 = %d\n", param.pl5_postdiv2);
+		dev_warn(rcrtc->dev->dev, "  pl5_divval   = %d\n", param.pl5_divval);
+		dev_warn(rcrtc->dev->dev, "  pl5_spread   = $%X\n", param.pl5_spread);
+		dev_warn(rcrtc->dev->dev, "  dsi_div_a    = %d\n", param.dsi_div_a);
+		dev_warn(rcrtc->dev->dev, "  dsi_div_b    = %d\n", param.dsi_div_b);
+		dev_warn(rcrtc->dev->dev, "  sel_pll5_4   = %d\n", param.sel_pll5_4);
 
 		/* CPG_PLL5_STBY: RESETB=0 */
 		reg_write(cpg_base + 0x0140, 0x00150000);
