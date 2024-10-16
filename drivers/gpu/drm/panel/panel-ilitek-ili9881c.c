@@ -676,6 +676,10 @@ static int ili9881c_dsi_probe(struct mipi_dsi_device *dsi)
 	dsi->format = MIPI_DSI_FMT_RGB888;
 	dsi->lanes = ctx->desc->lanes;
 
+	dev_warn(&dsi->dev, "%s(): pixel clock: %d MHz\n", __func__, ctx->desc->mode->clock);
+	dev_warn(&dsi->dev, "%s(): mode_flags:  $%04X\n", __func__, (u16) dsi->mode_flags);
+	dev_warn(&dsi->dev, "%s(): dsi-lanes:   %d\n", __func__, dsi->lanes);
+
 	return mipi_dsi_attach(dsi);
 }
 
